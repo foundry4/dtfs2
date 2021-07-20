@@ -47,3 +47,20 @@ module.exports.deleteFacility = async (facilityId, user) =>
     expect(resp.status).to.equal(200);
     return resp.body;
   });
+
+module.exports.updatePortalDealStatus = async (dealId, status) => {
+  cy.request({
+    method: 'put',
+    url: `${api()}/v1/portal/deals/${dealId}/status`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      status,
+    },
+  }).then((resp) => {
+    console.log({ resp });
+    expect(resp.status).to.equal(200);
+    return resp.body;
+  });
+};

@@ -64,3 +64,4 @@ Cypress.Commands.add('renameDeal', require('./portal/renameDeal'));
 
 // commands that add/edit facilities directly in central API
 Cypress.Commands.add('deleteFacility', require('./central-api/deleteFacility'));
+Cypress.Commands.add('updatePortalDealStatus', require('./central-api/updatePortalDealStatus'));

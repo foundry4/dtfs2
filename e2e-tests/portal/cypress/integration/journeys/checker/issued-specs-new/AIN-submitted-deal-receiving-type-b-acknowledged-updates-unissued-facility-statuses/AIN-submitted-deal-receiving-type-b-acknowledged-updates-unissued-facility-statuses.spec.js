@@ -2,8 +2,8 @@ const pages = require('../../../../pages');
 const dealWithNotStartedFacilityStatuses = require('./AIN-deal-with-unissued-facilities');
 const mockUsers = require('../../../../../fixtures/mockUsers');
 
-const CHECKER_LOGIN = mockUsers.find(user => (user.roles.includes('checker') && user.bank.name === 'Barclays Bank'));
-const MAKER_LOGIN = mockUsers.find(user => (user.roles.includes('maker') && user.bank.name === 'Barclays Bank'));
+const CHECKER_LOGIN = mockUsers.find((user) => (user.roles.includes('checker') && user.bank.name === 'Barclays Bank'));
+const MAKER_LOGIN = mockUsers.find((user) => (user.roles.includes('maker') && user.bank.name === 'Barclays Bank'));
 
 context('Checker submits an AIN deal with `Unissued` bonds and `Unconditional` loans; workflow responds', () => {
   let deal;
@@ -101,7 +101,7 @@ context('Checker submits an AIN deal with `Unissued` bonds and `Unconditional` l
         },
       ],
       loans: [
-        { 
+        {
           EWCS_portal_facility_id: dealFacilities.loans[0]._id,
           EWCS_ukef_facility_id: '56789',
           EWCS_status: '""',

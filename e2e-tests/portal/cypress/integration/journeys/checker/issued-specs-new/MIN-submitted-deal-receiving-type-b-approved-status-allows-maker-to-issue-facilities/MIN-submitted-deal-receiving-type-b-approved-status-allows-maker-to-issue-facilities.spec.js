@@ -63,35 +63,37 @@ context('Checker sumits an MIA deal with `Unissued` bonds and `Conditional` loan
     pages.contractConfirmSubmission.confirmSubmit().check();
     pages.contractConfirmSubmission.acceptAndSubmit().click();
 
+    cy.updatePortalDealStatus(dealId, 'approved');
+
     //---------------------------------------------------------------
     // receive typeB XML with `Approved` deal status
     //---------------------------------------------------------------
-    cy.sendTypeB({
-      header: {
-        portal_deal_id: dealId,
-        bank_deal_id: deal.details.bankSupplyContractID,
-        Message_Type: 'B',
-        Action_Code: '016',
-      },
-      deal: {
-        UKEF_deal_id: dealId,
-        Deal_status: 'approved',
-      },
-      bonds: [
-        {
-          BSS_portal_facility_id: dealFacilities.bonds[0]._id,
-          BSS_ukef_facility_id: '12345',
-          BSS_status: '""',
-        },
-      ],
-      loans: [
-        {
-          EWCS_portal_facility_id: dealFacilities.loans[0]._id,
-          EWCS_ukef_facility_id: '56789',
-          EWCS_status: '""',
-        },
-      ],
-    });
+    // cy.sendTypeB({
+    //   header: {
+    //     portal_deal_id: dealId,
+    //     bank_deal_id: deal.details.bankSupplyContractID,
+    //     Message_Type: 'B',
+    //     Action_Code: '016',
+    //   },
+    //   deal: {
+    //     UKEF_deal_id: dealId,
+    //     Deal_status: 'approved',
+    //   },
+    //   bonds: [
+    //     {
+    //       BSS_portal_facility_id: dealFacilities.bonds[0]._id,
+    //       BSS_ukef_facility_id: '12345',
+    //       BSS_status: '""',
+    //     },
+    //   ],
+    //   loans: [
+    //     {
+    //       EWCS_portal_facility_id: dealFacilities.loans[0]._id,
+    //       EWCS_ukef_facility_id: '56789',
+    //       EWCS_status: '""',
+    //     },
+    //   ],
+    // });
 
     //---------------------------------------------------------------
     // assert that:

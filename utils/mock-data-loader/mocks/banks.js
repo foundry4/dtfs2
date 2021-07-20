@@ -9,6 +9,7 @@ const BANKS = [
     ],
     companiesHouseNo: '01026167',
     partyUrn: '00300130',
+    useTFM: true,
   },
   {
     id: '961',
