@@ -20,7 +20,7 @@ const getLeadUnderwriter = async (req, res) => {
     currentLeadUnderWriterUserId = deal.tfm.leadUnderwriter;
   }
 
-  if (currentLeadUnderWriterUserId) {
+  if (currentLeadUnderWriterUserId && currentLeadUnderWriterUserId !== CONSTANTS.TASKS.UNASSIGNED) {
     currentLeadUnderWriter = await api.getUser(currentLeadUnderWriterUserId);
   }
 

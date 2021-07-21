@@ -82,7 +82,7 @@ describe('GET underwriting - lead underwriter', () => {
       });
     });
 
-    it('should call API to get current lead underwriter user data', async () => {
+    it('should call getUser API to get current lead underwriter user data', async () => {
       const req = {
         params: {
           _id: dealId,
@@ -93,9 +93,50 @@ describe('GET underwriting - lead underwriter', () => {
         },
       };
 
-      await underwriterLeadUnderwriterController.postAssignLeadUnderwriter(req, res);
+      await underwriterLeadUnderwriterController.getLeadUnderwriter(req, res);
 
       expect(apiGetUserSpy).toHaveBeenCalledWith(MOCK_DEAL.tfm.leadUnderwriter);
+    });
+  });
+
+  describe('when current lead underwriter is `Unassigned`', () => {
+    const MOCK_DEAL_UNASSIGNED_LEAD_UNDERWRITER = {
+      dealSnapshot: MOCK_DEAL.dealSnapshot,
+      tfm: {
+        leadUnderwriter: 'Unassigned',
+      },
+    };
+
+    const apiGetUserSpy = jest.fn(() => Promise.resolve({}));
+
+    beforeEach(() => {
+      api.getDeal = () => Promise.resolve(MOCK_DEAL_UNASSIGNED_LEAD_UNDERWRITER);
+      api.getUser = apiGetUserSpy;
+    });
+
+    it('should NOT call getUser API or render currentLeadUnderWriter in template ', async () => {
+      const req = {
+        params: {
+          _id: dealId,
+        },
+        session,
+      };
+
+      await underwriterLeadUnderwriterController.getLeadUnderwriter(req, res);
+
+      expect(apiGetUserSpy).not.toHaveBeenCalled();
+
+      expect(res.render).toHaveBeenCalledWith('case/underwriting/lead-underwriter/lead-underwriter.njk', {
+        userCanEdit,
+        activePrimaryNavigation: 'manage work',
+        activeSubNavigation: 'underwriting',
+        activeSideNavigation: 'lead underwriter',
+        deal: MOCK_DEAL_UNASSIGNED_LEAD_UNDERWRITER.dealSnapshot,
+        tfm: MOCK_DEAL_UNASSIGNED_LEAD_UNDERWRITER.tfm,
+        dealId: MOCK_DEAL_UNASSIGNED_LEAD_UNDERWRITER.dealSnapshot._id, // eslint-disable-line no-underscore-dangle
+        user: session.user,
+        currentLeadUnderWriter: undefined,
+      });
     });
   });
 
@@ -200,7 +241,7 @@ describe('POST underwriting - assign lead underwriter', () => {
     api.updateLeadUnderwriter = apiUpdateSpy;
   });
 
-  it('should call API and redirect to /lead-underwriter', async () => {
+  it('should call updateLeadUnderwriter API and redirect to /lead-underwriter', async () => {
     const req = {
       params: {
         _id: dealId,
