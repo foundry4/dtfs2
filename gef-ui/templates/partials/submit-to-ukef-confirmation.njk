@@ -1,0 +1,24 @@
+{% extends "index.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% block pageTitle %}
+  Automatic inclusion notice submitted to UKEF
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      {{ govukPanel({
+        titleText: "Automatic inclusion notice submitted to UKEF",
+        classes: "govuk-!-margin-bottom-7",
+        attributes: {
+          'data-cy': 'ukef-submission-confirmation'
+        }
+      }) }}
+
+      <p>We'll send you an email shortly to confirm we've accepted your notice</p>
+
+      <p><a class="govuk-link" href="/dashboard" data-cy="dashboard-link">Return to all applications and notices</a></p>
+    </div>
+  </div>
+{% endblock %}

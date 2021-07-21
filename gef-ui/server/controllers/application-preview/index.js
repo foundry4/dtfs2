@@ -36,7 +36,7 @@ const applicationPreview = async (req, res) => {
       return res.redirect('/dashboard/0');
     }
 
-    const maker = await api.getMakerUser(userId, userToken);
+    const maker = await api.getUserDetails(userId, userToken);
     return res.render('partials/application-preview.njk', {
       dealId: '-',
       companyName: exporter.details.companyName,

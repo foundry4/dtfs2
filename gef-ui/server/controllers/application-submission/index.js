@@ -16,7 +16,7 @@ export const postApplicationSubmission = async (req, res, next) => {
   const { applicationId } = params;
   const { comment } = body;
   const application = await api.getApplication(applicationId);
-  const maker = await api.getMakerUser(application.userId, userToken);
+  const maker = await api.getUserDetails(application.userId, userToken);
 
   // TODO : Add some validation here to make sure that the whole application is valid
   try {

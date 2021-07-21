@@ -4,6 +4,7 @@ export const PROGRESS = {
   IN_PROGRESS: 'IN_PROGRESS',
   BANK_CHECK: 'BANK_CHECK',
   COMPLETED: 'COMPLETED',
+  SUBMITTED_TO_UKEF: 'Submitted to UKEF',
 };
 
 export const FACILITY_TYPE = {

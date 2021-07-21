@@ -84,7 +84,7 @@ describe('GET Application Preview', () => {
     api.getExporter = () => Promise.resolve(mockExporterResponse);
     api.getCoverTerms = () => Promise.resolve(mockCoverTermsResponse);
     api.getFacilities = () => Promise.resolve(mockFacilityResponse);
-    api.getMakerUser = () => Promise.resolve(mockMakerUserResponse);
+    api.getUserDetails = () => Promise.resolve(mockMakerUserResponse);
     await applicationPreview(mockRequest, mockResponse);
     expect(mockResponse.render)
       .toHaveBeenCalledWith('partials/application-preview.njk', expect.objectContaining({

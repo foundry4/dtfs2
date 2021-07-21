@@ -105,7 +105,7 @@ describe('POST Application Submission', () => {
     const mockApplicationResponse = new MockApplicationResponse();
     api.updateApplication = jest.fn();
     api.getApplication = () => Promise.resolve(mockApplicationResponse);
-    api.getMakerUser = () => Promise.resolve(mockUserResponse);
+    api.getUserDetails = () => Promise.resolve(mockUserResponse);
     api.setApplicationStatus = () => Promise.resolve({});
     mockRequest.body.comment = 'Some comments here';
 
@@ -127,7 +127,7 @@ describe('POST Application Submission', () => {
     const mockApplicationResponse = new MockApplicationResponse();
     api.updateApplication = jest.fn();
     api.getApplication = () => Promise.resolve(mockApplicationResponse);
-    api.getMakerUser = () => Promise.resolve(mockUserResponse);
+    api.getUserDetails = () => Promise.resolve(mockUserResponse);
     mockRequest.body.comment = '';
 
     await postApplicationSubmission(mockRequest, mockResponse);
@@ -139,7 +139,7 @@ describe('POST Application Submission', () => {
     const mockApplicationResponse = new MockApplicationResponse();
     api.updateApplication = () => Promise.resolve({});
     api.getApplication = () => Promise.resolve(mockApplicationResponse);
-    api.getMakerUser = () => Promise.resolve(mockUserResponse);
+    api.getUserDetails = () => Promise.resolve(mockUserResponse);
     api.setApplicationStatus = jest.fn();
     mockRequest.body.comment = '';
 

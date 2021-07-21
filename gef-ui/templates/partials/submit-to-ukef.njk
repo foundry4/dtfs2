@@ -1,0 +1,59 @@
+{% extends "index.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block pageTitle %}
+  Submit to UKEF
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors.errorSummary,
+      attributes: {
+        'data-cy': 'error-summary'
+      }
+    }) }}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-6" data-cy="main-heading">
+        Submit to UKEF
+      </h1>
+    </div>
+
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <form method="post" data-cy="form">
+        {{ govukCharacterCount({
+          name: "comment",
+          id: "comment",
+          value: comment,
+          maxlength: maxCommentLength,
+          label: {
+            text: "Comments (optional)",
+            classes: "govuk-body"
+          },
+          attributes: {
+            'data-cy': 'comment'
+          }
+        }) }}
+
+        <p class="govuk-button-group govuk-!-margin-top-7" style="vertical-align: middle">
+          {{ govukButton({
+            text: "Submit to UKEF",
+            attributes: {
+              'data-cy': 'submit-button'
+            },
+            classes: "govuk-!-margin-right-6"
+          }) }}
+          <a class="govuk-link" href="/gef/application-details/{{ applicationId }}/preview"
+             data-cy="cancel-link">Cancel</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

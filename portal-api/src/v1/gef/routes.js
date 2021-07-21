@@ -18,7 +18,7 @@ router.route('/application')
 
 router.route('/application/:id')
   .get(validate({ role: ['maker', 'checker', 'data-admin'] }), application.getById)
-  .put(validate({ role: ['maker', 'data-admin'] }), application.update)
+  .put(validate({ role: ['maker', 'checker', 'data-admin'] }), application.update) // checker can add a comment
   .delete(validate({ role: ['maker', 'data-admin'] }), application.delete);
 
 router.route('/application/status/:id')

@@ -169,7 +169,7 @@ const getAddressesByPostcode = async (postcode) => {
     return apiErrorHandler(err);
   }
 };
-const getMakerUser = async (id, token) => {
+const getUserDetails = async (id, token) => {
   if (!token || !id) return false;
 
   try {
@@ -203,6 +203,6 @@ export {
   deleteFacility,
   getCompaniesHouseDetails,
   getAddressesByPostcode,
-  getMakerUser,
+  getUserDetails,
   setApplicationStatus,
 };
