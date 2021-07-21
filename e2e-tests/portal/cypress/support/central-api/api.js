@@ -3,8 +3,18 @@ const api = () => {
   return url;
 };
 
-module.exports.createFacility = async (facility, associatedDealId, user) =>
-  cy.request({
+module.exports.createFacility = async (facility, associatedDealId, user) => {
+  console.log({
+    url: `${api()}/v1/portal/facilities`,
+    body: {
+      facility: {
+        ...facility,
+        associatedDealId,
+      },
+      user,
+    },
+  });
+  return cy.request({
     method: 'POST',
     url: `${api()}/v1/portal/facilities`,
     body: {
@@ -15,9 +25,13 @@ module.exports.createFacility = async (facility, associatedDealId, user) =>
       user,
     },
   }).then((resp) => {
+    console.log({ resp });
     expect(resp.status).to.equal(200);
     return resp.body;
+  }).catch((err) => {
+    console.log({ err });
   });
+};
 
 module.exports.updateFacility = async (facilityId, facilityUpdate, user) =>
   cy.request({
@@ -49,17 +63,35 @@ module.exports.deleteFacility = async (facilityId, user) =>
   });
 
 module.exports.updatePortalDealStatus = async (dealId, status) => {
+  console.log({
+    url: `${api()}/v1/portal/deals/${dealId}/status`,
+  });
   cy.request({
     method: 'put',
     url: `${api()}/v1/portal/deals/${dealId}/status`,
     headers: {
       'Content-Type': 'application/json',
     },
-    data: {
+    body: {
       status,
     },
   }).then((resp) => {
-    console.log({ resp });
+    expect(resp.status).to.equal(200);
+    return resp.body;
+  });
+};
+
+module.exports.updatePortalFacilityStatus = async (facilityId, status) => {
+  cy.request({
+    method: 'put',
+    url: `${api()}/v1/portal/facilities/${facilityId}/status`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: {
+      status,
+    },
+  }).then((resp) => {
     expect(resp.status).to.equal(200);
     return resp.body;
   });

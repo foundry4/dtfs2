@@ -64,6 +64,8 @@ context('Checker sumits an MIA deal with `Unissued` bonds and `Conditional` loan
     pages.contractConfirmSubmission.acceptAndSubmit().click();
 
     cy.updatePortalDealStatus(dealId, 'approved');
+    cy.updatePortalFacilityStatus(dealFacilities.bonds[0]._id, '');
+    cy.updatePortalFacilityStatus(dealFacilities.loans[0]._id, '');
 
     //---------------------------------------------------------------
     // receive typeB XML with `Approved` deal status
