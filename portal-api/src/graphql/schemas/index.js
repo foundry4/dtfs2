@@ -140,11 +140,60 @@ input TransactionInput {
   filters: [TransactionFilters]
 }
 
+type Exporter {
+  _id : String
+  companiesHouseRegistrationNumber: String
+  companyName: String
+  registeredAddress : String
+  correspondenceAddress: String
+  selectedIndustry: String
+  industries: String,
+  smeType: String
+  probabilityOfDefault: Float
+  isFinanceIncreasing: Boolean
+  createdAt: Float
+  updatedAt: Float
+}
+
+type CoverTerms {
+  coverStart: Boolean
+  noticeDate: Boolean
+  facilityLimit: Boolean
+  exporterDeclaration: Boolean
+  dueDiligence: Boolean
+  facilityLetter: Boolean
+  facilityBaseCurrency: Boolean
+  facilityPaymentCurrency: Boolean
+  createdAt: Float
+  updatedAt: Float
+}
+
+type GefDeal {
+  _id: String
+  userId: String
+  status: String
+  bankId: String
+  exporterId: String
+  coverTermsId: String
+  bankInternalRefName: String
+  mandatoryVersionId: String
+  additionalRefName: String
+  createdAt: Float
+  updatedAt: Float
+  exporter: Exporter
+  coverTerms: CoverTerms
+}
+
+type GefDealsQuery {
+  count: Int
+  deals: [GefDeal]
+}
 
 type Query {
   currencies: [Currency]
   allDeals(params: DealsInput): AllDealsQuery
   deals(params: DealsInput): DealsQuery
+  gefDeals(params: DealsInput): GefDealsQuery
   transactions(params: TransactionInput): TransactionQuery
 }
 

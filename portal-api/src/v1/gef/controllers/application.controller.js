@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const db = require('../../../drivers/db-client');
 const utils = require('../utils.service');
 const { validationApplicationCreate, validatorStatusCheckEnums } = require('./validation/applicationExists');
+const { isSuperUser } = require('../../users/checks');
 
 const { Application } = require('../models/application');
 const { Exporter } = require('../models/exporter');
@@ -54,16 +55,12 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const collection = await db.getCollection(applicationCollectionName);
-  // const pagination = generatePagination(req);
+
   const doc = await collection
     .find({})
-    // .sort(pagination.sort)
-    // .skip(pagination.startsAtIndex)
-    // .limit(pagination.pageSize)
     .toArray();
   res.status(200).send({
     items: doc,
-    // pagination,
   });
 };
 
@@ -139,4 +136,63 @@ exports.delete = async (req, res) => {
     await facilitiesCollection.deleteMany({ applicationId: req.params.id });
   }
   res.status(utils.mongoStatus(applicationResponse)).send(applicationResponse.value ? applicationResponse.value : null);
+};
+
+const dealsFilters = (user, filters = []) => {
+  const amendedFilters = [...filters];
+
+  // add the bank clause if we're not a superuser
+  if (!isSuperUser(user)) amendedFilters.push({ bankId: { $eq: user.bank.id } });
+
+  let result = {};
+  if (amendedFilters.length === 1) {
+    [result] = amendedFilters;
+  } else if (amendedFilters.length > 1) {
+    result = {
+      $and: amendedFilters,
+    };
+  }
+
+  return result;
+};
+
+exports.findDeals = async (requestingUser, filters, start = 0, pagesize = 0) => {
+  const sanitisedFilters = dealsFilters(requestingUser, filters);
+
+  const collection = await db.getCollection(applicationCollectionName);
+
+  const doc = await collection
+    .aggregate([
+      {
+        $lookup: {
+          from: 'gef-exporter',
+          localField: 'exporterId',
+          foreignField: '_id',
+          as: 'exporter',
+        },
+      },
+      { $unwind: '$exporter' },
+      {
+        $lookup: {
+          from: 'gef-cover-terms',
+          localField: 'coverTermsId',
+          foreignField: '_id',
+          as: 'coverTerms',
+        },
+      },
+      { $unwind: '$coverTerms' },
+      { $match: sanitisedFilters },
+      { $sort: { updatedAt: -1, createdAt: -1 } },
+      {
+        $facet: {
+          count: [{ $count: 'total' }],
+          deals: [{ $skip: start }, ...pagesize ? [{ $limit: pagesize }] : []],
+        },
+      },
+      { $unwind: '$count' },
+      { $project: { count: '$count.total', deals: 1 } },
+    ])
+    .toArray();
+
+  return doc;
 };
